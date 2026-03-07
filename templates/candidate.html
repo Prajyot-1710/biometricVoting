@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Registration - BioVoting</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .registration-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .form-section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      color: var(--accent-color);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .symbol-upload-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .symbol-preview {
+      width: 250px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed var(--border-color);
+      border-radius: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .symbol-preview img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    function readURL1(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#img1').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+
+        // Set the ID manually as in original code logic if needed
+        // document.getElementById("img1").src = "../static/images/"+input.files[0].name;
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <form action="addcandidate" method="post" name="form1" class="registration-container">
+    <!-- Section: Symbol Upload -->
+    <div class="glass-card symbol-upload-zone">
+      <div class="form-section-title">
+        <i class="fas fa-image"></i>
+        <span>Election Symbol</span>
+      </div>
+
+      <div class="symbol-preview">
+        <img src="../static/images/bphoto.jpg" id="img1" alt="Candidate Symbol" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <button type="button" class="btn btn-secondary" style="width: 100%;">
+          <i class="fas fa-upload"></i> Choose Symbol
+        </button>
+        <input name="symbol" type="file" id="symbol" onchange="readURL1(this);" />
+      </div>
+      <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
+        Upload a clear image of the party symbol (PNG/JPG).
+      </p>
+    </div>
+
+    <!-- Section: Candidate Details -->
+    <div class="glass-card">
+      <div class="form-section-title">
+        <i class="fas fa-user-tie"></i>
+        <span>Candidate Information</span>
+      </div>
+
+      <div class="input-group">
+        <label>Candidate Name</label>
+        <input name="cname" type="text" class="input-control" id="cname" placeholder="Full legal name"
+          pattern="[A-Za-z ]+" required>
+      </div>
+
+      <div class="input-group">
+        <label>Political Party</label>
+        <input name="party" type="text" class="input-control" id="party" placeholder="Official party affiliation"
+          pattern="[A-Za-z]+" required>
+      </div>
+
+      <div style="margin-top: 3rem; display: flex; gap: 1rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 2;">Register Candidate</button>
+        <button type="reset" class="btn btn-secondary" style="flex: 1;">Reset</button>
+      </div>
+
+      <a href="/div2bak"
+        style="display: block; text-align: center; margin-top: 1.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.875rem;">
+        <i class="fas fa-arrow-left"></i> Return to Dashboard
+      </a>
+    </div>
+  </form>
+  <script>
+    {% if msg %}
+    alert("{{ msg }}");
+    {% endif %}
+    {% if err %}
+    alert("ERROR: {{ err }}");
+    {% endif %}
+  </script>
+</body>
+
+</html>

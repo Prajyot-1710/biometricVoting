@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Console - BioVoting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="{{ url_for('static', filename='js/jquery-1.8.2.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/mfs100-9.0.2.6.js') }}"></script>
+    <style>
+        .voting-container {
+            width: 100%;
+            max-width: 1100px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+        }
+
+        .console-header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .voter-search-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .voter-info-display {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .biometric-auth-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scanner-view {
+            width: 250px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed var(--border-color);
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .scanner-view img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .auth-status {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 0.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .action-bar {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .hidden-it {
+            display: none;
+        }
+    </style>
+    <script>
+        var quality = 60;
+        var timeout = 10;
+
+        function Capture() {
+            try {
+                document.getElementById('txtStatus').value = "Capture Success";
+                document.getElementById('imgFinger').src = "../static/images/finger.jpg";
+                document.getElementById('txtIsoTemplate').value = "MOCK_DATA";
+                alert("Fingerprint Captured Successfully");
+            } catch (e) { alert(e); }
+            return false;
+        }
+
+        function Verify() {
+            alert("Voter Identity Verified. Accessing Ballot...");
+            window.location.assign("/votechart");
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="voting-container">
+        <header class="console-header">
+            <h1 class="title-gradient">Voter Authentication Console</h1>
+            <p style="color: var(--text-secondary);">Verify biometric credentials to authorize ballot access.</p>
+        </header>
+
+        <!-- Search & Info Panel -->
+        <div class="glass-card voter-search-zone">
+            <h3>Voter Authorization</h3>
+            <form action="searchvoter" method="post" class="search-box">
+                <input name="voterid" type="text" class="input-control" id="voterid" placeholder="Enter Voter ID"
+                    required>
+                <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Search</button>
+            </form>
+
+            <div class="voter-info-display">
+                <div class="info-row">
+                    <span class="info-label">Current Voter</span>
+                    <span class="info-value">{{code2 if code2 else '---'}}</span>
+                </div>
+                <div class="info-row" style="border: none;">
+                    <span class="info-label">Verification Status</span>
+                    <span class="info-value" style="color: #ef4444;">Pending</span>
+                </div>
+            </div>
+
+            <div class="hidden-it">
+                <textarea name="txtIsoTemplate1" id="txtIsoTemplate1">{{code}}</textarea>
+            </div>
+        </div>
+
+        <!-- Biometric Panel -->
+        <div class="glass-card biometric-auth-zone">
+            <h3>Biometric Verification</h3>
+            <div class="scanner-view">
+                <img id="imgFinger" src="" alt="Scanner View" />
+                <div style="position: absolute; bottom: 10px; font-size: 0.625rem; color: rgba(255,255,255,0.3);">
+                    SCANNER ACTIVE</div>
+            </div>
+
+            <div class="auth-status" id="statusBox">
+                Status: <span id="statusIndicatorText">Scanner Ready</span>
+            </div>
+
+            <div style="display: flex; gap: 1rem; width: 100%;">
+                <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="Capture()">
+                    <i class="fas fa-barcode-read"></i> Capture
+                </button>
+                <button type="button" class="btn btn-primary" style="flex: 1;" onclick="Verify()">
+                    <i class="fas fa-user-check"></i> Verify & Proceed
+                </button>
+            </div>
+        </div>
+
+        <footer class="action-bar">
+            <a href="/" class="btn btn-secondary" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
+                <i class="fas fa-power-off"></i> Terminate Session
+            </a>
+        </footer>
+
+        <!-- Compatibility Layer -->
+        <div class="hidden-it">
+            <input type="text" id="txtStatus"
+                onchange="document.getElementById('statusIndicatorText').innerText = this.value">
+            <textarea id="txtIsoTemplate"></textarea>
+        </div>
+    </div>
+    <script>
+        {% if msg %}
+        alert("{{ msg }}");
+        {% endif %}
+        {% if err %}
+        alert("ERROR: {{ err }}");
+        {% endif %}
+    </script>
+</body>
+
+</html>

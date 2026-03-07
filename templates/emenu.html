@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Officer Dashboard - BioVoting</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .dashboard-container {
+      width: 100%;
+      max-width: 1000px;
+      padding: 2.5rem;
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .menu-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2.5rem;
+      gap: 1.5rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-color);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .menu-card i {
+      font-size: 3rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .menu-card h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .menu-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .danger-zone {
+      margin-top: 3rem;
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    .btn-danger:hover {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1 class="title-gradient">Election Control Center</h1>
+      <p style="color: var(--text-secondary);">Manage election data, oversee candidates, and review voting results.</p>
+    </header>
+
+    <main class="menu-grid">
+      <!-- Voter Management -->
+      <a href="/div2voter" class="glass-card menu-card">
+        <i class="fas fa-user-plus"></i>
+        <h3>Voter Entry</h3>
+        <p>Register new eligible voters into the biometric database.</p>
+      </a>
+
+      <a href="/voterlist" class="glass-card menu-card">
+        <i class="fas fa-users-viewfinder"></i>
+        <h3>Voter List</h3>
+        <p>View and manage all registered voters and their status.</p>
+      </a>
+
+      <!-- Candidate Management -->
+      <a href="/div2cand" class="glass-card menu-card">
+        <i class="fas fa-user-tie"></i>
+        <h3>Candidate Entry</h3>
+        <p>Add new candidates and party symbols for the election.</p>
+      </a>
+
+      <a href="/candlist" class="glass-card menu-card">
+        <i class="fas fa-list-check"></i>
+        <h3>Candidate List</h3>
+        <p>Complete roster of authorized candidates and parties.</p>
+      </a>
+
+      <!-- Election Results -->
+      <a href="/result" class="glass-card menu-card">
+        <i class="fas fa-chart-pie"></i>
+        <h3>Election Results</h3>
+        <p>Live tally of votes and demographic participation stats.</p>
+      </a>
+
+      <a href="/winner" class="glass-card menu-card">
+        <i class="fas fa-trophy"></i>
+        <h3>Declare Winner</h3>
+        <p>Official certification of election results and winner.</p>
+      </a>
+
+      <div class="danger-zone">
+        <a href="/resedata" class="btn btn-danger">
+          <i class="fas fa-trash-arrow-up"></i> Reset All Data
+        </a>
+        <a href="/logout" class="btn btn-secondary">
+          <i class="fas fa-sign-out-alt"></i> Secure Logout
+        </a>
+      </div>
+    </main>
+  </div>
+  <script>
+    {% if msg %}
+    alert("{{ msg }}");
+    {% endif %}
+    {% if err %}
+    alert("ERROR: {{ err }}");
+    {% endif %}
+  </script>
+</body>
+
+</html>

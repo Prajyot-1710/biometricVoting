@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Election Results - BioVoting</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .results-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 2rem;
+    }
+
+    .results-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .tally-board {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .tally-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      transition: transform 0.2s;
+    }
+
+    .tally-card:hover {
+      transform: scale(1.02);
+      border-color: var(--accent-color);
+    }
+
+    .candidate-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .cand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .cand-party {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .vote-count {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .count-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    .count-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+
+    .footer-actions {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="results-container">
+    <header class="results-header">
+      <h1 class="title-gradient">Live Election Tally</h1>
+      <p style="color: var(--text-secondary);">Real-time results from authenticated biometric voting stations.</p>
+    </header>
+
+    <main class="tally-board">
+      {% for item in data %}
+      <div class="glass-card tally-card">
+        <div class="candidate-info">
+          <span class="cand-name">{{item[0]}}</span>
+          <span class="cand-party">{{item[1]}}</span>
+        </div>
+        <div class="vote-count">
+          <span class="count-number">{{item[3]}}</span>
+          <span class="count-label">VOTES RECORDED</span>
+        </div>
+      </div>
+      {% endfor %}
+    </main>
+
+    <footer class="footer-actions">
+      <a href="/div2bak" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </footer>
+  </div>
+  <script>
+    {% if msg %}
+    alert("{{ msg }}");
+    {% endif %}
+    {% if err %}
+    alert("ERROR: {{ err }}");
+    {% endif %}
+  </script>
+</body>
+
+</html>

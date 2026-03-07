@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate List - BioVoting</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .list-container {
+      width: 100%;
+      max-width: 1000px;
+      padding: 2rem;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .data-table-wrapper {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .data-table th {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1.25rem 1rem;
+      font-weight: 600;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .data-table td {
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: middle;
+    }
+
+    .symbol-thumbnail {
+      width: 80px;
+      height: 80px;
+      border-radius: 0.5rem;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .candidate-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+    }
+
+    .party-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-color);
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="list-container">
+    <header class="list-header">
+      <div>
+        <h1 class="title-gradient" style="font-size: 2rem; margin: 0;">Authorized Candidates</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">Official roster of candidates and party symbols.
+        </p>
+      </div>
+      <a href="/div2bak" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back
+      </a>
+    </header>
+
+    <div class="glass-card data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th width="120">Symbol</th>
+            <th>Candidate Name</th>
+            <th>Political Party</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in data %}
+          <tr>
+            <td>
+              <img src="{{item[2]}}" alt="Symbol" class="symbol-thumbnail" id="img1" />
+            </td>
+            <td>
+              <div class="candidate-name">{{item[0]}}</div>
+            </td>
+            <td>
+              <span class="party-badge">{{item[1]}}</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    {% if msg %}
+    alert("{{ msg }}");
+    {% endif %}
+    {% if err %}
+    alert("ERROR: {{ err }}");
+    {% endif %}
+  </script>
+</body>
+
+</html>

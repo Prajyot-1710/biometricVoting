@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booth Control - BioVoting</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .dashboard-container {
+      width: 100%;
+      max-width: 800px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .dashboard-header {
+      margin-bottom: 3rem;
+    }
+
+    .action-grid {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .action-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      padding: 3rem;
+      transition: all 0.3s ease;
+    }
+
+    .action-card i {
+      font-size: 4rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .action-card:hover {
+      border-color: var(--accent-color);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .logout-btn {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1 class="title-gradient">Booth Control Center</h1>
+      <p style="color: var(--text-secondary);">Initialize and manage the voting process for this station.</p>
+    </header>
+
+    <main class="action-grid">
+      <a href="/div2voting" class="glass-card action-card">
+        <i class="fas fa-box-ballot"></i>
+        <h2>Start Voting Session</h2>
+        <p>Verify voter identity and authorize ballot casting.</p>
+        <span class="btn btn-primary" style="margin-top: 1rem;">Launch Console</span>
+      </a>
+    </main>
+
+    <footer>
+      <a href="/logout" class="btn btn-secondary logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Secure Logout
+      </a>
+    </footer>
+  </div>
+  <script>
+    {% if msg %}
+    alert("{{ msg }}");
+    {% endif %}
+    {% if err %}
+    alert("ERROR: {{ err }}");
+    {% endif %}
+  </script>
+</body>
+
+</html>

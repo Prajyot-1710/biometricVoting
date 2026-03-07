@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Login - BioVoting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="{{ url_for('static', filename='js/jquery-1.8.2.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/mfs100-9.0.2.6.js') }}"></script>
+    <style>
+        .login-container {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .step-indicator .active {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .biometric-preview {
+            width: 180px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--border-color);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .biometric-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .hidden-data {
+            display: none;
+        }
+    </style>
+    <script>
+        var quality = 60;
+        var timeout = 10;
+
+        function Capture() {
+            try {
+                document.getElementById('txtStatus').value = "Mock Capture Success";
+                document.getElementById('imgFinger').src = "../static/images/finger.jpg";
+                document.getElementById('txtIsoTemplate').value = "MOCK_DATA";
+                // alert("Finger Captured (Bypass Mode)");
+            }
+            catch (e) {
+                alert(e);
+            }
+            return false;
+        }
+
+        function Verify() {
+            // alert("Finger matched (Bypass Mode)");
+            window.location.assign("/div2Emenu");
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="login-container">
+        <!-- Step 1: Credentials -->
+        <div class="glass-card">
+            <h2 class="title-gradient">Phase 1</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Verify your administrative credentials.</p>
+
+            <form name="form1" method="post" action="searcheoff">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input name="username" type="text" class="input-control" id="username" pattern="[a-zA-Z0-9 ]+"
+                        required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input name="password" type="password" class="input-control" id="password" pattern="[a-zA-Z0-9 ]+"
+                        required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Verify Credentials</button>
+            </form>
+        </div>
+
+        <!-- Step 2: Biometric -->
+        <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <h2 class="title-gradient">Phase 2</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Biometric Identity Verification</p>
+
+            <div class="biometric-preview">
+                <img id="imgFinger" src="" alt="Fingerprint Placeholder" />
+            </div>
+
+            <div class="status-badge" id="captureStatusDisplay">
+                Status: <span id="currentStatusText" style="color: var(--accent-color);">Waiting...</span>
+            </div>
+
+            <div style="display: flex; gap: 1rem; width: 100%;">
+                <button type="button" class="btn btn-secondary" onclick="Capture()" style="flex: 1;">Scan
+                    Finger</button>
+                <button type="button" class="btn btn-primary" onclick="Verify()" style="flex: 1;">Login</button>
+            </div>
+
+            <a href="/"
+                style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.875rem; text-decoration: none;">
+                <i class="fas fa-arrow-left"></i> Cancel and Return
+            </a>
+        </div>
+    </div>
+
+    <!-- Legacy / Hidden Data for compatibility -->
+    <div class="hidden-data">
+        <textarea id="txtIsoTemplate1">{{code}}</textarea>
+        <textarea id="txtIsoTemplate"></textarea>
+        <input type="text" id="txtStatus"
+            onchange="document.getElementById('currentStatusText').innerText = this.value">
+    </div>
+
+    <script>
+        // Sync the hidden status field with our display
+        setInterval(() => {
+            const status = document.getElementById('txtStatus').value;
+            if (status) {
+                document.getElementById('currentStatusText').innerText = status;
+            }
+        }, 500);
+    </script>
+    <script>
+        {% if msg %}
+        alert("{{ msg }}");
+        {% endif %}
+        {% if err %}
+        alert("ERROR: {{ err }}");
+        {% endif %}
+    </script>
+</body>
+
+</html>

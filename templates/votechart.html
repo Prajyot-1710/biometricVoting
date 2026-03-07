@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Digital Ballot - BioVoting</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .ballot-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 2rem;
+    }
+
+    .ballot-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .ballot-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .candidate-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 1fr 150px;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .candidate-row:hover {
+      border-color: var(--accent-color);
+      background: rgba(56, 189, 248, 0.03);
+      transform: scale(1.01);
+    }
+
+    .symbol-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      background: white;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    }
+
+    .cand-details h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--text-primary);
+    }
+
+    .cand-details p {
+      margin: 0.25rem 0 0;
+      color: var(--accent-color);
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+    }
+
+    .btn-vote {
+      padding: 1rem;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-vote:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+      filter: brightness(1.1);
+    }
+
+    .hidden-inputs {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ballot-container">
+    <header class="ballot-header">
+      <h1 class="title-gradient">Digital Ballot Paper</h1>
+      <p style="color: var(--text-secondary);">Select your preferred candidate to cast your secure biometric vote.</p>
+    </header>
+
+    <main class="ballot-grid">
+      {% for item in data %}
+      <form action="castvote" method="post" class="glass-card candidate-row">
+        <img src="{{item[2]}}" alt="Symbol" class="symbol-img" id="img1" />
+
+        <div class="cand-details">
+          <h3>{{item[0]}}</h3>
+          <p>{{item[1]}}</p>
+        </div>
+
+        <div class="hidden-inputs">
+          <input name="cname" type="text" value="{{item[0]}}" readonly>
+          <input name="party" type="text" value="{{item[1]}}" readonly>
+        </div>
+
+        <div style="text-align: right;">
+          <button type="submit" class="btn-vote">
+            CAST VOTE
+          </button>
+        </div>
+      </form>
+      {% endfor %}
+    </main>
+
+    <footer style="margin-top: 4rem; text-align: center; color: var(--text-secondary); font-size: 0.875rem;">
+      <i class="fas fa-shield-check"></i> Encrypted Biometric Voting Session
+    </footer>
+  </div>
+  <script>
+    {% if msg %}
+    alert("{{ msg }}");
+    {% endif %}
+    {% if err %}
+    alert("ERROR: {{ err }}");
+    {% endif %}
+  </script>
+</body>
+
+</html>
